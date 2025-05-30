@@ -1,18 +1,10 @@
-```json
 {
-  "name": "darksr-md-bot",
+  "name": "surya-xd-session-generator",
   "version": "1.0.0",
-  "description": "WhatsApp Bot with QR and Pairing Code",
+  "description": "Session generator project",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Darksr",
-  "license": "MIT",
-  "dependencies": {
-    "@hapi/boom": "^10.0.0",
-    "@whiskeysockets/baileys": "^4.0.0",
-    "express": "^4.18.2"
-  }
+  "dependencies": {}
 }
-```

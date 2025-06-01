@@ -1,4 +1,4 @@
-const { malvinid } = require('./id'); 
+const { SURYAid } = require('./id'); 
 const express = require('express');
 const fs = require('fs');
 let router = express.Router();
@@ -6,7 +6,7 @@ const pino = require("pino");
 const { Storage } = require("megajs");
 
 const {
-    default: Malvin_Tech,
+    default: DARK_SURYA,
     useMultiFileAuthState,
     delay,
     makeCacheableSignalKeyStore,
@@ -62,14 +62,14 @@ function removeFile(FilePath) {
 
 // Router to handle pairing code generation
 router.get('/', async (req, res) => {
-    const id = malvinid(); 
+    const id = SURYAd(); 
     let num = req.query.number;
 
-    async function MALVIN_PAIR_CODE() {
+    async function SURYA_PAIR_CODE() {
         const { state, saveCreds } = await useMultiFileAuthState('./temp/' + id);
 
         try {
-            let Malvin = Malvin_Tech({
+            let SURYA = DARK_SURYA ({
                 auth: {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -79,10 +79,10 @@ router.get('/', async (req, res) => {
                 browser: Browsers.macOS("Safari")
             });
 
-            if (!Malvin.authState.creds.registered) {
+            if (!SURYA.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await Malvin.requestPairingCode(num);
+                const code = await SURYA.requestPairingCode(num);
                 console.log(`Your Code: ${code}`);
 
                 if (!res.headersSent) {
@@ -90,8 +90,8 @@ router.get('/', async (req, res) => {
                 }
             }
 
-            Malvin.ev.on('creds.update', saveCreds);
-            Malvin.ev.on("connection.update", async (s) => {
+            SURYA.ev.on('creds.update', saveCreds);
+            SURYA.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
 
                 if (connection === "open") {
@@ -110,9 +110,9 @@ router.get('/', async (req, res) => {
 
                     console.log(`Session ID: ${sid}`);
 
-                    const session = await Malvin.sendMessage(Malvin.user.id, { text: sid });
+                    const session = await SURYA.sendMessage(Malvin.user.id, { text: sid });
 
-                    const MALVIN_TEXT = `
+                    const DARK_SURYA = `
 🎉 *Welcome to SURYA-XD!* 🚀  
 
 🔒 *Your Session ID* is ready!  ⚠️ _Keep it private and secure — dont share it with anyone._ 
@@ -130,14 +130,14 @@ router.get('/', async (req, res) => {
 
 🚀 _Thanks for choosing SURYA-XD — Let the automation begin!_ ✨`;
 
-                    await Malvin.sendMessage(Malvin.user.id, { text: MALVIN_TEXT }, { quoted: session });
+                    await SURYA.sendMessage(Malvin.user.id, { text: MALVIN_TEXT }, { quoted: session });
 
                     await delay(100);
-                    await Malvin.ws.close();
+                    await SURYA.ws.close();
                     return removeFile('./temp/' + id);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
                     await delay(10000);
-                    MALVIN_PAIR_CODE();
+                    SURYA_PAIR_CODE();
                 }
             });
         } catch (err) {
@@ -150,7 +150,7 @@ router.get('/', async (req, res) => {
         }
     }
 
-    await MALVIN_PAIR_CODE();
+    await SURYA_PAIR_CODE();
 });
 
 module.exports = router;

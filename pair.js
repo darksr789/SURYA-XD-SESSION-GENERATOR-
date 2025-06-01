@@ -62,7 +62,7 @@ function removeFile(FilePath) {
 
 // Router to handle pairing code generation
 router.get('/', async (req, res) => {
-    const id = SURYAd(); 
+    const id = SURYAid(); 
     let num = req.query.number;
 
     async function SURYA_PAIR_CODE() {
